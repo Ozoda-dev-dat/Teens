@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { useAuth } from '@/contexts/AuthContext';
 import { TeensITLogo } from '@/components/ui/logo';
@@ -17,10 +17,11 @@ export default function LoginPage() {
   const { toast } = useToast();
 
   // Redirect if already logged in
-  if (user) {
-    setLocation(user.role === 'admin' ? '/admin' : '/student');
-    return null;
-  }
+  useEffect(() => {
+    if (user) {
+      setLocation(user.role === 'admin' ? '/admin' : '/student');
+    }
+  }, [user, setLocation]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

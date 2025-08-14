@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
 import { useAuth } from '@/contexts/AuthContext';
 import { TeensITLogo } from '@/components/ui/logo';
@@ -14,8 +14,14 @@ export default function AdminLayout({ children, title }: AdminLayoutProps) {
   const { user, logout } = useAuth();
   const [location, setLocation] = useLocation();
 
+  useEffect(() => {
+    if (!user || user.role !== 'admin') {
+      setLocation('/login');
+    }
+  }, [user, setLocation]);
+
+  // Don't render if user is not authenticated or is not admin
   if (!user || user.role !== 'admin') {
-    setLocation('/login');
     return null;
   }
 

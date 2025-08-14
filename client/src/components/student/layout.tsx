@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
 import { useAuth } from '@/contexts/AuthContext';
 import { TeensITLogo } from '@/components/ui/logo';
@@ -11,8 +12,14 @@ export default function StudentLayout({ children }: StudentLayoutProps) {
   const { user, logout } = useAuth();
   const [location, setLocation] = useLocation();
 
+  useEffect(() => {
+    if (!user || user.role !== 'student') {
+      setLocation('/login');
+    }
+  }, [user, setLocation]);
+
+  // Don't render if user is not authenticated or is not student
   if (!user || user.role !== 'student') {
-    setLocation('/login');
     return null;
   }
 
